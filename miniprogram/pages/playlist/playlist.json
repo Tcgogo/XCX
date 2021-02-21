@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "tc-playlist": "../../components/playlist/playlist"
+  }
+}
