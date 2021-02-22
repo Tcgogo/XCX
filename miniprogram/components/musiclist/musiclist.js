@@ -1,5 +1,4 @@
 // components/musiclist/musiclist.js
-const app = getApp()
 Component({
   /**
    * 组件的属性列表
@@ -16,9 +15,9 @@ Component({
   },
   pageLifetimes: {
     show() {
-      this.setData({
+      /* this.setData({
         playingId: parseInt(app.getPlayMusicId())
-      })
+      }) */
     }
   },
 
@@ -26,9 +25,8 @@ Component({
    * 组件的方法列表
    */
   methods: {
+    //点击选中变红
     onSelect(event) {
-      // 事件源 事件处理函数 事件对象 事件类型
-      // console.log(event.currentTarget.dataset.musicid)
       const ds = event.currentTarget.dataset
       const musicid = ds.musicid
       this.setData({
