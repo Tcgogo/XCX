@@ -81,7 +81,8 @@ Page({
     name: 'music',
     data: {
       start: this.data.playlist.length,
-      count: 15
+      count: 15,
+      $url: 'playlist'
     }
   }).then((res) => {
     this.setData({
@@ -89,5 +90,22 @@ Page({
     })
     wx.stopPullDownRefresh()
   })
-  }
+  },
+/*   getMusiclist(event) {
+    wx.cloud.callFunction({
+      name: 'music',
+      data: {
+        playlistId: event.target.dataset.playlistid,
+        $url: 'musiclist'
+      }
+    }).then(res => {
+      console.log(res)
+    })
+  }, */
+  goToMusiclist(event) {
+    wx.navigateTo({
+      url: `../../pages/musiclist/musiclist?playlistId=${event.target.dataset.playlistid}`,
+    })
+  },
+
 })

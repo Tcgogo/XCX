@@ -7,8 +7,8 @@
   </block>
 </swiper>
 
-<view class="playlist-container">
-  <block wx:for="{{playlist}}" wx:key="_id">
-    <tc-playlist playlist="{{item}}" />
+<view class="playlist-container" >
+  <block wx:for="{{playlist}}" wx:key="_id" >
+    <tc-playlist playlist="{{item}}" bind:tap="goToMusiclist" data-playlistId="{{item.id}}" />
   </block>
 </view>
