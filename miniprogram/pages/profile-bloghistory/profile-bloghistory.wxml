@@ -1,0 +1,2 @@
+<!--pages/profile-bloghistory/profile-bloghistory.wxml-->
+<tc-musiclist musiclist="{{musiclist}}" />
