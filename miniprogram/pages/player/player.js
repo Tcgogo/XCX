@@ -4,6 +4,8 @@ let musiclist = []
 let nowPlayingIndex = 0
 // 获取全局唯一的背景音频管理器
 let backgroundAudioManager = wx.getBackgroundAudioManager()
+
+const app = getApp()
 Page({
 
   /**
@@ -28,9 +30,19 @@ Page({
   },
 
   _loadMusicDetail(musicId) {
-    backgroundAudioManager.stop()
+    if (musicId == app.getPlayMusicId()) {
+      this.setData({
+        isSame: true
+      })
+    } else {
+      this.setData({
+        isSame: false
+      })
+    }
+    if (!this.data.isSame) {
+      backgroundAudioManager.stop()
+    }
     let music = musiclist[nowPlayingIndex]
-    console.log(music)
     wx.setNavigationBarTitle({
       title: music.name,
     })
@@ -38,6 +50,7 @@ Page({
       picUrl: music.al.picUrl,
       isPlaying: false,
     })
+    app.setPlayMusicId(musicId)
     wx.showLoading({
       title: '歌曲加载中',
     })
@@ -48,7 +61,6 @@ Page({
         $url: 'musicUrl'
       }
     }).then((res) => {
-      console.log(res.result)
       backgroundAudioManager.src = res.result.data[0].url
       backgroundAudioManager.title = music.name
       backgroundAudioManager.coverImgUrl = music.al.picUrl
@@ -69,14 +81,15 @@ Page({
       }
     }).then(res => {
       let lyric = '暂无歌词'
-      let lrc = res.result.lrc
+      let lrc = res.result.lrc.lyric
       if(lrc) {
         lyric = lrc
       }
       this.setData({
-        lyric
+        lyric: lyric
       })
     })
+    
   },
 
   togglePlaying() {
@@ -88,6 +101,9 @@ Page({
     this.setData({
       isPlaying: !this.data.isPlaying,
     })
+  },
+  timeUpdate(event) {
+    this.selectComponent('.lyric').update(event.detail.currentTime)
   },
 
   onPrev() {
