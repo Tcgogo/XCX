@@ -26,6 +26,7 @@ Page({
     musiclist = wx.getStorageSync('musiclist')
     this._loadMusicDetail(options.musicId)
   },
+
   _loadMusicDetail(musicId) {
     backgroundAudioManager.stop()
     let music = musiclist[nowPlayingIndex]
@@ -58,31 +59,69 @@ Page({
     this.setData({
       isPlaying: true,
     })
+
+    // 加载歌词
+    wx.cloud.callFunction({
+      name: 'music',
+      data: {
+        musicId,
+        $url: 'lyric',
+      }
+    }).then(res => {
+      let lyric = '暂无歌词'
+      let lrc = res.result.lrc
+      if(lrc) {
+        lyric = lrc
+      }
+      this.setData({
+        lyric
+      })
+    })
   },
+
   togglePlaying() {
-    if(this.data.isPlaying) {
+    if (this.data.isPlaying) {
       backgroundAudioManager.pause()
-    } else (
+    } else(
       backgroundAudioManager.play()
     )
     this.setData({
       isPlaying: !this.data.isPlaying,
     })
   },
+
   onPrev() {
     nowPlayingIndex--
     if (nowPlayingIndex < 0) {
       nowPlayingIndex = musiclist.length - 1
     }
     this._loadMusicDetail(musiclist[nowPlayingIndex].id)
-    
+
   },
+
   onNext() {
     nowPlayingIndex++
     if (nowPlayingIndex === musiclist.length) {
       nowPlayingIndex = 0
     }
     this._loadMusicDetail(musiclist[nowPlayingIndex].id)
+  },
+
+  onChangeLyricShow() {
+    this.setData({
+      isLyricShow: !this.data.isLyricShow
+    })
+  },
+
+  onPlay() {
+    this.setData({
+      isPlaying: true,
+    })
+  },
+  onPause() {
+    this.setData({
+      isPlaying: false,
+    })
   },
 
   /**
